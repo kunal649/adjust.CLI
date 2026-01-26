@@ -1,0 +1,1 @@
+const http = require("http").createServer((req, res) => res.statusCode(200).json({msg: "Server live."})).listen(8000, () => console.log(`Server running at PORT:8000 ${http.emit}`));
