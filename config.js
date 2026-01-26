@@ -1,7 +1,6 @@
 const fs = require("fs").promises;  // Doubt 
 const path = require("path"); 
 const os = require("os");
-const { json } = require("stream/consumers");
 
 const CONFIG_DIR = path.join(os.homedir(), '.adjust');
 const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json'); 
