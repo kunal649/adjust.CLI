@@ -37,7 +37,7 @@ async function downloadRuntime(language) {
 
     const progressBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_grey);
     https.get(url, (response) => {
-        const totalSize = response.headers(["content-length"],10); 
+        const totalSize = response.headers(["content-length"] ,10); 
         let downloadedSize = 0; 
 
         progressBar.start(totalSize, 0);
@@ -88,7 +88,7 @@ async function extractRuntime(filepath, language) {
     return extractDir; 
 }
 
-async function setupRuntime (filepath, language) {
+async function setupRuntime (language) {
     try {
         await downloadRuntime(language); 
         await extractRuntime(filepath, language); 

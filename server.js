@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { Command } = require('commander');
 const { saveConfig, loadConfig} = require('./utils/config'); 
-
+const {setupRuntime, getRuntimePath} = require('./utils/downloader.js'); 
 const program = new Command(); 
 
 program
@@ -15,16 +15,31 @@ program
     .action(async () => {
         console.log("Downloading assets...")
     }); 
-    
+
 program
     .command('stack <language>')
     .description('Select a language environment (python, node, golang)')
     .action(async (language) => { 
+        if(!['python', 'node'].includes(language)){
+            console.log("Supported languages: python, node, golang"); 
+            return;
+        } 
+
+        console.log("Setting up languages...");
+    try { 
+        await setupRuntime(); 
         const config = await loadConfig();
-        config.activeLanguage = language;  // Doubt 
-        config.environment = 'In development'
+        config.activeLanguage = language;  
+        config.environment[language] = {
+            path: getRuntimePath(language),
+            installed_at: new Date().toISOString()
+        }
         await saveConfig(config); 
-        console.log(`Selected: ${language}`);
+        console.log(`Selected: ${language}. Now ready to use!`);
+    }
+    catch (err) {
+         console.error(`Failed to setup ${language}:`, err.message);
+    }
     });
 
 program 
