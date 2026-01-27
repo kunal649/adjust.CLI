@@ -20,7 +20,6 @@ async function ensureRuntimeDir(language) { // returns directory/filepath of run
 }
 
 async function downloadRuntime(language) {
-try {
     return new Promise((resolve, reject) => {
         const url = RUNTIMES[language];
     if (!RUNTIMES) { return reject(new Error(`Unknown language : ${language}`)); }
@@ -58,7 +57,7 @@ try {
         });
         fileStream.on('error', (err) => {
             progressBar.stop();
-            fs.unlinkSync(filepath, () => {console.log(`Some anomality, connection to filepath destroyed.`)});
+            fs.unlinkSync(filepath, () => {console.log(`Some anomality, stream and filePath connection destroyed.`)});
         // doubt: why cant I destroy the filestream here? does rejecting promise destroy stream by its own?
             reject(err); 
         }); 
@@ -67,7 +66,4 @@ try {
         reject(err);
     });
 }); 
-} catch (err) {
-    console.log(err); 
-}
 }
