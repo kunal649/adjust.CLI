@@ -7,7 +7,7 @@ const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
 
 async function ensureConfigDir() {
     try {
-        await fs.mkdir(CONFIG_DIR, {recursive: true}); 
+        await fs.mkdir(CONFIG_DIR, {recursive: true}); // Doubt: Recursive?
     } catch (err) {
         console.log('Failed to create new directory.', err); 
     }

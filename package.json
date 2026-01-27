@@ -1,7 +1,7 @@
 {
   "name": "node.cli.project",
   "version": "1.0.0",
-    "bin": {
+  "bin": {
     "adjust": "./server.js"
   },
   "main": "index.js",
@@ -14,6 +14,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "commander": "^14.0.2"
+    "cli-progress": "^3.12.0",
+    "commander": "^14.0.2",
+    "tar": "^7.5.6"
   }
 }
