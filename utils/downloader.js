@@ -21,9 +21,9 @@ async function ensureRuntimeDir(language) {
 }
 
 async function downloadRuntime(language) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         const url = RUNTIMES[language];
-    if (!RUNTIMES) { return reject(new Error(`Unknown language : ${language}`)); }
+    if (!url) { return reject(new Error(`Unknown language : ${language}`)); }
 
     const runtimePath = await ensureRuntimeDir(language); 
     const filename = path.basename(url); 
@@ -37,7 +37,7 @@ async function downloadRuntime(language) {
 
     const progressBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_grey);
     https.get(url, (response) => {
-        const totalSize = response.headers(["content-length"] ,10); 
+        const totalSize = parseInt(response.headers['content-length'] ,10); 
         let downloadedSize = 0; 
 
         progressBar.start(totalSize, 0);
@@ -58,7 +58,8 @@ async function downloadRuntime(language) {
         });
         fileStream.on('error', (err) => {
             progressBar.stop();
-            fs.unlinkSync(filepath, () => {console.log(`Some anomality, stream and filePath connection destroyed.`)});
+            fileStream.destroy(); 
+            fs.unlink(filepath, () => {console.log(`Some anomality, stream and filePath connection destroyed.`)});
     // doubt: why cant I destroy the filestream here? does rejecting promise destroy stream by its own?
             reject(err); 
         }); 
@@ -71,7 +72,7 @@ async function downloadRuntime(language) {
 
 async function extractRuntime(filepath, language) {
     const runtimeDir = path.dirname(filepath);
-    const extractDir = path.join(runtimeDir, 'bin'); 
+    const extractDir = path.join(runtimeDir); 
 
     if (fs.existsSync(extractDir)){
         console.log(`${language} runtime already extracted !`);
@@ -82,19 +83,20 @@ async function extractRuntime(filepath, language) {
 
     await tar.x({
         file: filepath,
-        cwd: runtimeDir //doubt -> I guess it should be extractDir, back to this while debugging.
+        cwd: runtimeDir //doubt -> I guess it should be extractDir, I'll debug it w checkpoint 3.
     });
+    // Can I use cli-progress here? umm, ig for that ive to extract using core features, rather than a lib. 
     console.log(`${language} runtime extracted to: ${extractDir}`);
     return extractDir; 
 }
 
-async function setupRuntime (language) {
+async function setupRuntime(language) {
     try {
-        await downloadRuntime(language); 
-        await extractRuntime(filepath, language); 
+        const filepath = await downloadRuntime(language); 
+        const extractDir = await extractRuntime(filepath, language); 
         return extractDir; 
     } catch (err) {
-        throw new Error(`Failed to setup ${language}: ${err.message}`);
+        throw new Error(`Failed to setup ${language}: ${err.message}, Check Function : setupRunTime`);
     }
 }
 

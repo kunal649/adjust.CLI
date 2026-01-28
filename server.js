@@ -27,7 +27,7 @@ program
 
         console.log("Setting up languages...");
     try { 
-        await setupRuntime(); 
+        await setupRuntime(language); 
         const config = await loadConfig();
         config.activeLanguage = language;  
         config.environment[language] = {
