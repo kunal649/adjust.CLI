@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const { Command } = require('commander');
 const { saveConfig, loadConfig} = require('./utils/config'); 
-const {setupRuntime, getRuntimePath} = require('./utils/downloader.js'); 
+const {setupRuntime, getRuntimePath, getRuntimeExecutable} = require('./utils/downloader.js'); 
 const program = new Command(); 
 
 program
@@ -27,7 +27,8 @@ program
 
         console.log("Setting up languages...");
     try { 
-        await setupRuntime(language); 
+        await setupRuntime(language);
+        getRuntimeExecutable(language);  
         const config = await loadConfig();
         config.activeLanguage = language;  
         config.environment[language] = {
