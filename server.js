@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 const { Command } = require('commander');
 const { saveConfig, loadConfig} = require('./utils/config'); 
-const {setupRuntime, getRuntimePath, getRuntimeExecutable} = require('./utils/downloader.js'); 
+const {setupRuntime, getRuntimePath, getRuntimeExecutable} = require('./utils/downloader.js');
+const { runFile } = require("./utils/runtimeHandler.js");  
 const program = new Command(); 
 
 program
@@ -55,7 +56,8 @@ program
 program
     .command('run <file>')
     .description('Run a file with selected envirnonment')
-    .action((file) => {
+    .action(async (file) => {
+        await runFile(file); 
         console.log(`Running ${file}`); 
     });
     
