@@ -1,6 +1,7 @@
 const { spawn } = require("child_process"); 
 const { loadConfig } = require("./config.js");
 const { getRuntimeExecutable } = require("./downloader.js");
+const { installDependencies } = require('./dependencyHandler.js')
 const fs = require("fs");
 const path = require("path");
 
@@ -19,17 +20,26 @@ try {
     }
     const language = config.activeLanguage; 
     const executablePath = getRuntimeExecutable(language);
+
     if(!fs.existsSync(executablePath)){ 
         console.log(`Error: ${language} runtime not found. Run adjust stack <language>. `);
         process.exit(1); 
     }
     console.log(`Running file with ${language}....`); 
 
+    const scriptDir = path.dirname(path.resolve(file));
+      try {
+            await installDependencies(language, scriptDir);
+        } catch (err) {
+            console.error('Failed to install dependencies. Aborting.');
+            process.exit(1);
+        }
+
      const child_process = spawn(executablePath, [path.resolve(file)], {
         stdio: 'inherit' //we piped all I/O to parent terminal. nice.
      });
  
-    child_process.on("close", (code) => {
+    child_process.on('close', (code) => {
         if ( code === 0 ){
             console.log(`\n Process completed successfully`); 
         } else {

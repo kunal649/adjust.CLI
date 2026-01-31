@@ -123,7 +123,7 @@ function getRuntimePath(language) {
     return path.join(RUNTIME_DIR, language, 'bin');
 }
 
-function getRuntimeExecutable(language) {
+function getExecutable(language) {
   const runtimePath = getRuntimePath(language);
   
   if (language === 'python') {
@@ -140,4 +140,4 @@ function getRuntimeExecutable(language) {
 }
 
 
-module.exports = { setupRuntime, getRuntimePath, getRuntimeExecutable }
+module.exports = { setupRuntime, getRuntimePath, getExecutable }

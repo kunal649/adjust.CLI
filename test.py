@@ -1,2 +1,3 @@
-print('This is just a test file for project `ADJUST`')
-print('OKAY WOW PYTHON DOES NOT NEED TERMINATORS'); 
+import requests
+print("Testing dependency installation!")
+print(requests.get('https://httpbin.org/get').status_code)

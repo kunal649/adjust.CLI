@@ -2,39 +2,63 @@
 const fs = require("fs");
 const path = require("node:path");
 const {spawn} = require("child_process"); 
-const { getRuntimePath } = require("./downloader.js"); 
+const { getExecutable } = require("./downloader.js"); 
 
-const currentDir = process.cwd(); 
-if (language === 'python'){
-    const reqPyFile = path.join(currentDir, 'requirements.txt'); 
-    if(!fs.existsSync(reqPyFile)) {
-    console.log("No libraries, modules detected. Make sure your project's root directory has : requirements.txt");
-    const pyFile = fs.readFile(reqPyFile, 'utf8'); 
-    return pyFile;
-}
-}
-else {
-    const reqNodeFile = path.join(currentDir, 'package.json'); 
-    if(!fs.existsSync(reqNodeFile)) {
-    console.log('No libraries, modules detected. Make sure your project root directory has "package.json"');
-    const nodeFile = fs.readFile(reqNodeFile, 'utf8');
-    return nodeFile;
-}
-}
+function getDependencyManager(language) {
+    const langPath = getExecutable(language); 
+    const runtimePath = path.dirname(langPath); 
 
-// 2. If it exists, how would you run: pip install -r requirements.txt
-//    using the pip that came with your downloaded Python?
-    const executablePath = getRuntimeExecutable(language);
-    if(!fs.existsSync(executablePath)){ 
-        console.log(`Error: ${language} runtime not found. Run adjust stack <language>. `);
-        process.exit(1); 
+    if (language === 'python'){
+    return langPath; 
+    } else if(language === 'node') {
+        return process.platform === 'win32'
+            ? path.join(runtimePath, 'npm.cmd')
+            : path.join(runtimePath, 'npm');
     }
-    console.log(`Running file with ${language}....`); 
+    throw new Error(`Unknown Language:${language}`); 
+} 
 
-     const child_process = spawn(executablePath, [path.resolve(file)], {
-        stdio: 'inherit' //we piped all I/O to parent terminal. nice.
+function installDependencies(language, scriptDir) {    
+let depFile, command, args; 
+if (language === 'python') {
+    depFile = path.join(scriptDir, 'requirements.txt'); 
+        if (!fs.existsSync(depFile)) {
+            console.log('No requirements.txt found, skipping dependency installation');
+            return true; 
+        }
+    command = getDependencyManager(language);
+    args = ['-m', 'pip', 'install', '-r', depFile]; 
+} else if (language === 'node') {
+    depFile = path.join(scriptDir, 'package.json'); 
+        if (!fs.existsSync(depFile)) {
+            console.log('No package.json found, skipping dependency installation'); 
+            return true; 
+        } 
+    command = getDependencyManager(language); 
+    args = ['install']; 
+}
+
+console.log(`${depFile} found.... Installing dependencies`); 
+
+return new Promise((resolve, reject) => {
+const install_process = spawn(command, args, {
+        cwd: scriptDir,
+        stdio: 'inherit'
      });
- 
+install_process.on("close", (code) => {
+    if(code === '0') { console.log('Dependencies installed successfully. \n'); return resolve(true); }
+    else { console.log(`Dependencies installation failed with code : ${code}`); }
+}); 
+
+install_process.on('error', (err) => {
+    console.error(`Error running dependency manager: ${err.message}`);
+    reject(err);
+}); 
+}); 
+}
+
+module.exports = { getDependencyManager, installDependencies}
+
 // 3. How would you wait for pip to finish BEFORE running the script?
 
 // 4. What if pip install fails? Should you still run the script?
