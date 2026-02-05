@@ -1,4 +1,5 @@
-# adjust.CLI
+# adjust CLI
+Im building this CLI as side project. I divided it into checkpoints as mentioned below.
 
 CHECKPOINT 1: Basic CLI Structure
 Build: Command-line interface that accepts and parses commands
@@ -16,9 +17,9 @@ Shebang (#!) for making CLI executable
 npm link for testing CLI locally
 Exit codes and process.exit()
 
-What you learn: How CLIs work under the hood, argument parsing, making Node scripts executable
+What I learn: How CLIs work under the hood, argument parsing, making Node scripts executable
 Prerequisites: Basic Node.js, npm packages
-Done when: You can run adjust list and it prints something
+Done when: We can run adjust list and it prints something
 
 CHECKPOINT 2: Configuration Management
 Build: Store and retrieve user's selected language/environment
@@ -30,7 +31,7 @@ path.join() for cross-platform paths
 JSON file storage
 Configuration file patterns
 
-What you learn: File I/O in Node, persistent storage without databases, cross-platform path handling
+What I learn: File I/O in Node, persistent storage without databases, cross-platform path handling
 Prerequisites: fs module, async/await
 Done when: adjust select python saves to config file, adjust list reads and shows "Active: python"
 
@@ -45,7 +46,7 @@ File extraction (tar, zip libraries)
 Progress indicators (cli-progress library)
 Environment variables and PATH manipulation
 
-What you learn: Network requests in Node without libraries, stream handling, file extraction, managing system PATH
+What I learn: Network requests in Node without libraries, stream handling, file extraction, managing system PATH
 Prerequisites: Streams, buffers, async operations
 Done when: Running adjust select python downloads Python runtime to ~/.adjust/runtimes/python/ and extracts it
 
@@ -61,11 +62,11 @@ Inheriting stdio from parent
 Process exit codes
 Signal handling (SIGINT, SIGTERM)
 
-What you learn: Process management in Node, spawning child processes, handling process I/O, this is CORE backend skill
+What you learn: Process management in Node, spawning child processes, handling process I/O. 
 Prerequisites: child_process module, understanding of processes
-Done when: adjust run script.py executes Python file using your managed runtime and shows output in terminal
+Done when: adjust run script.py executes Python file using our managed runtime and shows output in terminal
 
-CHECKPOINT 5: Dependency Management
+CHECKPOINT 5: Dependency Management ( current status )
 Build: Auto-detect and install dependencies (requirements.txt, package.json)
 Topics/Concepts:
 
@@ -77,7 +78,7 @@ Multiple sequential process spawning
 Process chaining
 Error handling for failed installations
 
-What you learn: Orchestrating multiple system commands, handling complex async flows, error propagation
+What I learn: Orchestrating multiple system commands, handling complex async flows, error propagation
 Prerequisites: All previous checkpoints
 Done when: Running adjust run app.py in a folder with requirements.txt automatically installs dependencies first, then runs the file
 
@@ -91,7 +92,7 @@ Colorful terminal output (chalk library)
 Writing good READMEs
 Recording terminal demos (asciinema)
 
-What you learn: Production-ready code practices, documentation
+What I learn: Production-ready code practices, documentation
 Done when: Works reliably, has good README, demo video ready
 
 MANDATORY LEARNING POINTS ACROSS PROJECT:
