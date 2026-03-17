@@ -1,6 +1,8 @@
 
 [![project status](https://img.shields.io/badge/status-in_progress-yellow.svg)](https://github.com/kunal649/adjust.CLI)
 [![language Node.js](https://img.shields.io/badge/language-Node.js-green.svg)](https://nodejs.org/)
+![Visitor Count](https://profile-counter.glitch.me/{kunal649}/count.svg)
+
 
 # adjust CLI
 
