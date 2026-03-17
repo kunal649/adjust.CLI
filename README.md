@@ -116,7 +116,7 @@ Topics/Concepts:
 
 </details>
 
-What you learn: Process management in Node, spawning child processes, handling process I/O.  
+What I learn: Process management in Node, spawning child processes, handling process I/O.  
 Prerequisites: child_process module, understanding of processes  
 Done when: adjust run script.py executes Python file using our managed runtime and shows output in terminal
 
@@ -171,11 +171,11 @@ Done when: Works reliably, has good README, demo video ready
 
 ## MANDATORY LEARNING POINTS ACROSS PROJECT:
 
-- Streams (you MUST understand these deeply)
+- Streams (i covered em deeply)
 - Child processes (spawn, exec, fork differences)
 - File system operations (async)
 - Cross-platform compatibility (path, os)
 - Error handling in async contexts
-- Process lifecycle and signal
+- Process lifecycle and signal handling
 
 ---
